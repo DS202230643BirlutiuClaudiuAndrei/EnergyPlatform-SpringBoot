@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
@@ -32,19 +33,23 @@ public class EnergyUser implements Serializable {
 
     @Column(name = "first_name", nullable = false)
     @NotNull
+    @Size(min = 1, max = 100)
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
     @NotNull
+    @Size(min = 1, max = 100)
     private String lastName;
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotNull
+    @Size(min = 1, max = 100)
     private String email;
 
     @Column(name = "role", nullable = false)
     @NotNull
+    @Enumerated(EnumType.STRING)
     private EnergyUserRole role;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
