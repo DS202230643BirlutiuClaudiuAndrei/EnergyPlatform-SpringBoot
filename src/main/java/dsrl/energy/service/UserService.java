@@ -34,17 +34,18 @@ public class UserService {
     }
 
     /**
-     *  Implementation based on https://www.bezkoder.com/spring-boot-pagination-filter-jpa-pageable/
-     * @param pageSize items / page
+     * Implementation based on https://www.bezkoder.com/spring-boot-pagination-filter-jpa-pageable/
+     *
+     * @param pageSize   items / page
      * @param pageNumber the number of page to retrieve
      * @return a map with the objects necessary for react pagination
      */
     public Map<String, Object> fetchAllClients(Integer pageSize, Integer pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
-        Page<EnergyUser> retrievedData =  userPaginationRepository.findAll(pageable);
+        Page<EnergyUser> retrievedData = userPaginationRepository.findAll(pageable);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("energyUsers", retrievedData.getContent() );
+        response.put("energyUsers", retrievedData.getContent());
         response.put("currentPage", retrievedData.getNumber());
         response.put("totalItems", retrievedData.getTotalElements());
         response.put("totalPages", retrievedData.getTotalPages());
