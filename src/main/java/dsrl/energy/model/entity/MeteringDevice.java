@@ -44,7 +44,7 @@ public class MeteringDevice implements Serializable {
     private Collection<Measurement> measurements;
 
     @ManyToOne
-    @Column(name = "owner_id", nullable = true)
+    @JoinColumn(name = "owner_id", nullable = false)
     private EnergyUser owner;
 
 }

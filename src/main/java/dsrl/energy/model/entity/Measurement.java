@@ -32,8 +32,8 @@ public class Measurement {
     @Column(name = "consumption", nullable = false)
     private Double consumption;
 
-    @Column(name = "metering_device_id")
     @ManyToOne
+    @JoinColumn(name = "metering_device_id", nullable = false)
     private MeteringDevice meteringDevice;
 
 }
