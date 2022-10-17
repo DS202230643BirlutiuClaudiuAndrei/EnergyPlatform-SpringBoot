@@ -4,6 +4,7 @@ import dsrl.energy.dto.ClientToCreateDTO;
 import dsrl.energy.dto.mapper.UserMapper;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.repository.EnergyUserRepository;
+import dsrl.energy.repository.UserPaginationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +20,12 @@ import java.util.Map;
 @Transactional
 public class UserService {
     private final EnergyUserRepository userRepository;
+    private final UserPaginationRepository userPaginationRepository;
 
     @Autowired
-    public UserService(EnergyUserRepository userRepository) {
+    public UserService(EnergyUserRepository userRepository, UserPaginationRepository userPaginationRepository) {
         this.userRepository = userRepository;
+        this.userPaginationRepository = userPaginationRepository;
     }
 
     public void createNewClient(ClientToCreateDTO newClient) {
@@ -38,7 +41,7 @@ public class UserService {
      */
     public Map<String, Object> fetchAllClients(Integer pageSize, Integer pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
-        Page<EnergyUser> retrievedData =  userRepository.findAll(pageable);
+        Page<EnergyUser> retrievedData =  userPaginationRepository.findAll(pageable);
 
         Map<String, Object> response = new HashMap<>();
         response.put("energyUsers", retrievedData.getContent() );
