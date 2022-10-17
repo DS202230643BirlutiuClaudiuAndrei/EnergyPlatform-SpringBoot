@@ -1,0 +1,39 @@
+package dsrl.energy.model.entity;
+
+
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
+@Setter
+@Entity
+@Table(name = "measurements")
+public class Measurement {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Type(type = "uuid-binary")
+    private UUID id;
+
+    @Column(name = "time_stamp", nullable = false)
+    private LocalDateTime timeStamp;
+
+    @Column(name = "consumption", nullable = false)
+    private Double consumption;
+
+    @Column(name = "metering_device_id")
+    @ManyToOne
+    private MeteringDevice meteringDevice;
+
+}
