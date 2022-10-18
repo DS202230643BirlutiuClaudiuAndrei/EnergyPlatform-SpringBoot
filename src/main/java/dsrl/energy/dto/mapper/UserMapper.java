@@ -8,7 +8,7 @@ import dsrl.energy.model.enums.EnergyUserRole;
 
 public final class UserMapper {
 
-    public static EnergyUser clientToEntity(ClientToCreateDTO newClient){
+    public static EnergyUser clientToEntity(ClientToCreateDTO newClient) {
         return EnergyUser.builder()
                 .email(newClient.getEmail())
                 .firstName(newClient.getFirstName())
@@ -17,7 +17,7 @@ public final class UserMapper {
                 .build();
     }
 
-    public static ClientInfoDTO clientToDTO(EnergyUser client){
+    public static ClientInfoDTO clientToDTO(EnergyUser client) {
         return ClientInfoDTO.builder()
                 .email(client.getEmail())
                 .firstName(client.getFirstName())
@@ -25,4 +25,6 @@ public final class UserMapper {
                 .id(client.getId())
                 .build();
     }
+
+
 }

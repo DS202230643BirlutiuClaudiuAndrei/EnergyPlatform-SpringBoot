@@ -2,9 +2,11 @@ package dsrl.energy.service;
 
 import dsrl.energy.dto.ClientInfoDTO;
 import dsrl.energy.dto.ClientToCreateDTO;
+import dsrl.energy.dto.ClientToEditDTO;
 import dsrl.energy.dto.mapper.UserMapper;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.repository.EnergyUserRepository;
+import dsrl.energy.service.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +18,6 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -56,4 +57,11 @@ public class UserService {
         return response;
     }
 
+    public void updateClient(ClientToEditDTO clientToEditDTO) {
+        EnergyUser toUpdateUser = userRepository.findById(clientToEditDTO.getId()).orElseThrow(() ->
+                new ResourceNotFoundException("User", "id", clientToEditDTO.getId().toString()));
+        toUpdateUser.setEmail(clientToEditDTO.getEmail());
+        toUpdateUser.setFirstName(clientToEditDTO.getFirstName());
+        toUpdateUser.setLastName(clientToEditDTO.getLastName());
+    }
 }

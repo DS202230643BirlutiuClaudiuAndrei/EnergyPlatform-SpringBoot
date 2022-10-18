@@ -1,11 +1,19 @@
 package dsrl.energy.service.exception;
 
 
-import java.time.LocalDateTime;
+import lombok.*;
 
+import java.util.Date;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ErrorDetails {
 
-    private LocalDateTime timeStamp;
-    private int status;
+    private Date timestamp;
+    private String message;
+    private String details;
 
 }

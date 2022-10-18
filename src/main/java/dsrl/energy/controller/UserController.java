@@ -1,6 +1,7 @@
 package dsrl.energy.controller;
 
 import dsrl.energy.dto.ClientToCreateDTO;
+import dsrl.energy.dto.ClientToEditDTO;
 import dsrl.energy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,11 @@ public class UserController {
         return new ResponseEntity<>("Success", HttpStatus.CREATED);
     }
 
+    @PutMapping(path = "/client)")
+    public ResponseEntity<String> editClient(@RequestBody @Valid ClientToEditDTO clientToEditDTO){
+        userService.updateClient(clientToEditDTO);
+        return new ResponseEntity<>("Succes!", HttpStatus.ACCEPTED);
+    }
     @GetMapping(path = "/client")
     public ResponseEntity<Map<String, Object>> getAllClients(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "3") int pageSize) {
 
