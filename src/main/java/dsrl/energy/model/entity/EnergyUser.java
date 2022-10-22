@@ -33,7 +33,8 @@ public class EnergyUser implements Serializable, UserDetails {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Type(type = "uuid-binary")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Column(name = "first_name", nullable = false)
@@ -60,13 +61,13 @@ public class EnergyUser implements Serializable, UserDetails {
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Collection<MeteringDevice> meteringDevices;
 
-    @Column(name = "user_password",nullable = false)
+    @Column(name = "user_password", nullable = false)
     @NotNull
     private String userPassword;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> grantedAuthorities=new LinkedList<>();
+        List<GrantedAuthority> grantedAuthorities = new LinkedList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(this.getRole().name()));
         return grantedAuthorities;
     }
@@ -83,7 +84,7 @@ public class EnergyUser implements Serializable, UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override

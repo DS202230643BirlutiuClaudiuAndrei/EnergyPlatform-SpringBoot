@@ -1,7 +1,8 @@
 package dsrl.energy.controller;
 
 import dsrl.energy.config.security.TokenProvider;
-import dsrl.energy.dto.mapper.authentication.CredentialsDTO;
+import dsrl.energy.dto.authentication.CredentialsDTO;
+import dsrl.energy.dto.authentication.InfoRegisterDTO;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,16 +38,16 @@ public class EnergyGeneralController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid CredentialsDTO credentials) throws Exception {
+    public ResponseEntity<String> register(@RequestBody @Valid InfoRegisterDTO infoRegisterDTO) throws Exception {
 
         //create an account
+        String email = userService.registerNewUser(infoRegisterDTO);
 
-        doAuthentication(credentials.getEmail(), credentials.getPassword());
-        String token = tokenProvider.provideToken((EnergyUser) userService.loadUserByUsername(credentials.getEmail()));
+        doAuthentication(email, infoRegisterDTO.getPassword());
+        String token = tokenProvider.provideToken((EnergyUser) userService.loadUserByUsername(email));
 
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
-
 
 
     private void doAuthentication(String email, String password) throws Exception {

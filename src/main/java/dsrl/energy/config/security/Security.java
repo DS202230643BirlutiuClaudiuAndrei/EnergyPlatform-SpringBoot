@@ -52,7 +52,8 @@ public class Security {
         // Set permissions on endpoints at high level
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                        .anyRequest().authenticated();
+                .antMatchers("/register").permitAll()
+                .anyRequest().authenticated();
 
         //enable cors
         http.cors().and().csrf().disable();

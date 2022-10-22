@@ -3,9 +3,9 @@ package dsrl.energy.service;
 import dsrl.energy.dto.ClientInfoDTO;
 import dsrl.energy.dto.ClientToCreateDTO;
 import dsrl.energy.dto.ClientToEditDTO;
+import dsrl.energy.dto.authentication.InfoRegisterDTO;
+import dsrl.energy.dto.authentication.UserAuthMapper;
 import dsrl.energy.dto.mapper.UserMapper;
-import dsrl.energy.dto.mapper.authentication.InfoRegisterDTO;
-import dsrl.energy.dto.mapper.authentication.UserAuthMapper;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.enums.EnergyUserRole;
 import dsrl.energy.repository.EnergyUserRepository;
@@ -13,6 +13,7 @@ import dsrl.energy.service.exception.ConstraintViolationException;
 import dsrl.energy.service.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,16 +77,15 @@ public class UserService implements UserDetailsService {
      */
     public String registerNewUser(InfoRegisterDTO registerDTO) {
         EnergyUser energyUser = UserAuthMapper.toEntity(registerDTO, EnergyUserRole.CLIENT);
+        energyUser.setUserPassword(passwordEncoder.encode(registerDTO.getPassword()));
         EnergyUser savedUser;
         try {
-            energyUser.setUserPassword(passwordEncoder.encode(registerDTO.getPassword()));
-            savedUser = userRepository.save(energyUser);
-        } catch (Exception e) {
+            savedUser = userRepository.saveAndFlush(energyUser);
+        } catch (DataIntegrityViolationException e) {
             log.error("Could not save the new client " + e.getMessage());
             throw new ConstraintViolationException("Could not save the new client");
         }
-
-        return savedUser.getEmail();
+        return energyUser.getEmail();
     }
 
     @Override

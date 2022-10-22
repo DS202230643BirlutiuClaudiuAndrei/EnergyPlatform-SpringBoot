@@ -1,4 +1,4 @@
-package dsrl.energy.dto.mapper.authentication;
+package dsrl.energy.dto.authentication;
 
 import lombok.*;
 
@@ -16,7 +16,7 @@ public class InfoRegisterDTO {
     @NotNull
     @Email
     @Size(min=1, max =100)
-    private String Email;
+    private String email;
     @NotNull
     @Size(min=1, max = 100)
     private String firstName;

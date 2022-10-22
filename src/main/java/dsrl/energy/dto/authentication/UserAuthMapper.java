@@ -1,4 +1,4 @@
-package dsrl.energy.dto.mapper.authentication;
+package dsrl.energy.dto.authentication;
 
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.enums.EnergyUserRole;
