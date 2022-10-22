@@ -24,10 +24,7 @@ public class Security {
     private final AccessDeniedHandler accessDeniedHandler;
     private final TokenFilter tokenFilter;
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {

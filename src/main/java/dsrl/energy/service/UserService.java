@@ -4,10 +4,15 @@ import dsrl.energy.dto.ClientInfoDTO;
 import dsrl.energy.dto.ClientToCreateDTO;
 import dsrl.energy.dto.ClientToEditDTO;
 import dsrl.energy.dto.mapper.UserMapper;
+import dsrl.energy.dto.mapper.authentication.InfoRegisterDTO;
+import dsrl.energy.dto.mapper.authentication.UserAuthMapper;
 import dsrl.energy.model.entity.EnergyUser;
+import dsrl.energy.model.enums.EnergyUserRole;
 import dsrl.energy.repository.EnergyUserRepository;
+import dsrl.energy.service.exception.ConstraintViolationException;
 import dsrl.energy.service.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,14 +30,11 @@ import java.util.Map;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final EnergyUserRepository userRepository;
-
-    @Autowired
-    public UserService(EnergyUserRepository userRepository) {
-        this.userRepository = userRepository;
-
-    }
+    private final PasswordEncoder passwordEncoder;
 
     public void createNewClient(ClientToCreateDTO newClient) {
         EnergyUser toInsertClient = UserMapper.clientToEntity(newClient);
@@ -49,8 +52,7 @@ public class UserService implements UserDetailsService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
         Page<EnergyUser> retrievedData = userRepository.findAll(pageable);
 
-        List<ClientInfoDTO> clientInfoDTOList = retrievedData.stream()
-                .map(UserMapper::clientToDTO).toList();
+        List<ClientInfoDTO> clientInfoDTOList = retrievedData.stream().map(UserMapper::clientToDTO).toList();
         Map<String, Object> response = new HashMap<>();
         response.put("energyUsers", clientInfoDTOList);
         response.put("currentPage", retrievedData.getNumber());
@@ -61,11 +63,29 @@ public class UserService implements UserDetailsService {
     }
 
     public void updateClient(ClientToEditDTO clientToEditDTO) {
-        EnergyUser toUpdateUser = userRepository.findById(clientToEditDTO.getId()).orElseThrow(() ->
-                new ResourceNotFoundException("User", "id", clientToEditDTO.getId().toString()));
+        EnergyUser toUpdateUser = userRepository.findById(clientToEditDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", clientToEditDTO.getId().toString()));
         toUpdateUser.setEmail(clientToEditDTO.getEmail());
         toUpdateUser.setFirstName(clientToEditDTO.getFirstName());
         toUpdateUser.setLastName(clientToEditDTO.getLastName());
+    }
+
+    /**
+     * This method is called to register a new energy user in application by a user
+     *
+     * @return a string with the email
+     */
+    public String registerNewUser(InfoRegisterDTO registerDTO) {
+        EnergyUser energyUser = UserAuthMapper.toEntity(registerDTO, EnergyUserRole.CLIENT);
+        EnergyUser savedUser;
+        try {
+            energyUser.setUserPassword(passwordEncoder.encode(registerDTO.getPassword()));
+            savedUser = userRepository.save(energyUser);
+        } catch (Exception e) {
+            log.error("Could not save the new client " + e.getMessage());
+            throw new ConstraintViolationException("Could not save the new client");
+        }
+
+        return savedUser.getEmail();
     }
 
     @Override

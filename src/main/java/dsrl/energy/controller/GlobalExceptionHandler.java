@@ -1,5 +1,6 @@
 package dsrl.energy.controller;
 
+import dsrl.energy.service.exception.ConstraintViolationException;
 import dsrl.energy.service.exception.ErrorDetails;
 import dsrl.energy.service.exception.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> resourceNotFoundException(ConstraintViolationException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
     @Override

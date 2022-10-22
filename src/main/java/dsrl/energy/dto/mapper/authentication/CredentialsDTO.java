@@ -1,4 +1,4 @@
-package dsrl.energy.dto;
+package dsrl.energy.dto.mapper.authentication;
 
 import lombok.Data;
 
