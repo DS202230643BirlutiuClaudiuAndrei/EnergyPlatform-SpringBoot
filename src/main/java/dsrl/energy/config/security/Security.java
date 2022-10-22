@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
@@ -21,6 +22,7 @@ public class Security {
     private final UserService userService;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
+    private final TokenFilter tokenFilter;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -59,6 +61,8 @@ public class Security {
         http.cors().and().csrf().disable();
         //use no session to store information about logged user, the authentication is based on jwt token provided in request
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //add filter based on jwt token
+        http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
