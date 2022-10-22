@@ -5,6 +5,9 @@ import dsrl.energy.model.enums.EnergyUserRole;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,6 +15,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -21,7 +26,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "energy_users")
-public class EnergyUser implements Serializable {
+public class EnergyUser implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,4 +59,45 @@ public class EnergyUser implements Serializable {
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Collection<MeteringDevice> meteringDevices;
+
+    @Column(name = "user_password",nullable = false)
+    @NotNull
+    private String userPassword;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> grantedAuthorities=new LinkedList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(this.getRole().name()));
+        return grantedAuthorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.userPassword;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
