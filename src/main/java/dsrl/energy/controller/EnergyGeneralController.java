@@ -4,6 +4,7 @@ import dsrl.energy.config.security.TokenProvider;
 import dsrl.energy.dto.authentication.CredentialsDTO;
 import dsrl.energy.dto.authentication.InfoRegisterDTO;
 import dsrl.energy.model.entity.EnergyUser;
+import dsrl.energy.model.enums.EnergyUserRole;
 import dsrl.energy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class EnergyGeneralController {
     public ResponseEntity<String> register(@RequestBody @Valid InfoRegisterDTO infoRegisterDTO) throws Exception {
 
         //create an account
-        String email = userService.registerNewUser(infoRegisterDTO);
+        String email = userService.registerNewUser(infoRegisterDTO, EnergyUserRole.CLIENT);
 
         doAuthentication(email, infoRegisterDTO.getPassword());
         String token = tokenProvider.provideToken((EnergyUser) userService.loadUserByUsername(email));

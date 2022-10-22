@@ -38,13 +38,7 @@ public class TokenProvider implements Serializable {
         claims.put("id", energyUser.getId());
         Date issuedDate = new Date(System.currentTimeMillis());
         Date expirationDate = new Date(System.currentTimeMillis() + tokenProperties.getTokenValidity());
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(energyUser.getUsername())
-                .setIssuedAt(issuedDate)
-                .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.forName(tokenProperties.getTokenRsa()), tokenProperties.getTokenSecret())
-                .compact();
+        return Jwts.builder().setClaims(claims).setSubject(energyUser.getUsername()).setIssuedAt(issuedDate).setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, tokenProperties.getTokenSecret()).compact();
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsTFunction) {
@@ -62,7 +56,7 @@ public class TokenProvider implements Serializable {
     public boolean isValidToken(String token, UserDetails energyUser) {
         String usernameFromToken = getClaimFromToken(token, Claims::getSubject);
         Date expirationDateFromToken = getClaimFromToken(token, Claims::getExpiration);
-        return (expirationDateFromToken.before(new Date(System.currentTimeMillis()))) && usernameFromToken.equals(energyUser.getUsername());
+        return (expirationDateFromToken.after(new Date(System.currentTimeMillis()))) && usernameFromToken.equals(energyUser.getUsername());
     }
 
 }

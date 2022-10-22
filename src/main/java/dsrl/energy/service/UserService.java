@@ -1,7 +1,6 @@
 package dsrl.energy.service;
 
 import dsrl.energy.dto.ClientInfoDTO;
-import dsrl.energy.dto.ClientToCreateDTO;
 import dsrl.energy.dto.ClientToEditDTO;
 import dsrl.energy.dto.authentication.InfoRegisterDTO;
 import dsrl.energy.dto.authentication.UserAuthMapper;
@@ -37,10 +36,24 @@ public class UserService implements UserDetailsService {
     private final EnergyUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void createNewClient(ClientToCreateDTO newClient) {
-        EnergyUser toInsertClient = UserMapper.clientToEntity(newClient);
-        userRepository.save(toInsertClient);
+    /**
+     * This method is called to register a new energy user in application
+     *
+     * @return a string with the email
+     */
+    public String registerNewUser(InfoRegisterDTO infoRegisterDTO, EnergyUserRole energyUserRole) {
+        EnergyUser energyUser = UserAuthMapper.toEntity(infoRegisterDTO, energyUserRole);
+        energyUser.setUserPassword(passwordEncoder.encode(infoRegisterDTO.getPassword()));
+        EnergyUser savedUser;
+        try {
+            savedUser = userRepository.saveAndFlush(energyUser);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Could not save the new client " + e.getMessage());
+            throw new ConstraintViolationException("Could not save the new user account");
+        }
+        return savedUser.getEmail();
     }
+
 
     /**
      * Implementation based on https://www.bezkoder.com/spring-boot-pagination-filter-jpa-pageable/
@@ -68,24 +81,6 @@ public class UserService implements UserDetailsService {
         toUpdateUser.setEmail(clientToEditDTO.getEmail());
         toUpdateUser.setFirstName(clientToEditDTO.getFirstName());
         toUpdateUser.setLastName(clientToEditDTO.getLastName());
-    }
-
-    /**
-     * This method is called to register a new energy user in application by a user
-     *
-     * @return a string with the email
-     */
-    public String registerNewUser(InfoRegisterDTO registerDTO) {
-        EnergyUser energyUser = UserAuthMapper.toEntity(registerDTO, EnergyUserRole.CLIENT);
-        energyUser.setUserPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        EnergyUser savedUser;
-        try {
-            savedUser = userRepository.saveAndFlush(energyUser);
-        } catch (DataIntegrityViolationException e) {
-            log.error("Could not save the new client " + e.getMessage());
-            throw new ConstraintViolationException("Could not save the new client");
-        }
-        return energyUser.getEmail();
     }
 
     @Override

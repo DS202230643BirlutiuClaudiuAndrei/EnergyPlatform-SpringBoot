@@ -46,7 +46,7 @@ public class TokenFilter extends OncePerRequestFilter {
             if (tokenProvider.isValidToken(token, energyUser)) {
                 UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(energyUser, null, energyUser.getAuthorities());
                 upat.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
+                log.info("Set authentication in context holder");
                 //set new authentication in spring security context
                 SecurityContextHolder.getContext().setAuthentication(upat);
             }

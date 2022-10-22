@@ -41,7 +41,10 @@ public class Security {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+        //enable cors
+        http.cors().and().csrf().disable();
+        //use no session to store information about logged user, the authentication is based on jwt token provided in request
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //set exception handler when jwt
         http.exceptionHandling(
                 (exceptions) ->
@@ -55,10 +58,6 @@ public class Security {
                 .antMatchers("/register").permitAll()
                 .anyRequest().authenticated();
 
-        //enable cors
-        http.cors().and().csrf().disable();
-        //use no session to store information about logged user, the authentication is based on jwt token provided in request
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //add filter based on jwt token
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
