@@ -13,5 +13,6 @@ public class TokenProperties {
 
     private String tokenSecret;
     private Long tokenValidity;
+    private String tokenRsa;
 
 }

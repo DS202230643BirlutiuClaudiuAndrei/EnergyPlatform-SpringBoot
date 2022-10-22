@@ -41,7 +41,7 @@ public class TokenProvider implements Serializable {
                 .setSubject(energyUser.getUsername())
                 .setIssuedAt(issuedDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, tokenProperties.getTokenSecret())
+                .signWith(SignatureAlgorithm.forName(tokenProperties.getTokenRsa()), tokenProperties.getTokenSecret())
                 .compact();
     }
 

@@ -12,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,7 +24,7 @@ import java.util.Map;
 
 @Service
 @Transactional
-public class UserService {
+public class UserService implements UserDetailsService {
     private final EnergyUserRepository userRepository;
 
     @Autowired
@@ -63,5 +66,10 @@ public class UserService {
         toUpdateUser.setEmail(clientToEditDTO.getEmail());
         toUpdateUser.setFirstName(clientToEditDTO.getFirstName());
         toUpdateUser.setLastName(clientToEditDTO.getLastName());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
     }
 }
