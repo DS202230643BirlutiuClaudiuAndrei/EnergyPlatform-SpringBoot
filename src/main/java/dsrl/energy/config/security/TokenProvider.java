@@ -36,6 +36,7 @@ public class TokenProvider implements Serializable {
         claims.put("firstName", energyUser.getFirstName());
         claims.put("lastName", energyUser.getLastName());
         claims.put("id", energyUser.getId());
+        claims.put("role", energyUser.getRole().name());
         Date issuedDate = new Date(System.currentTimeMillis());
         Date expirationDate = new Date(System.currentTimeMillis() + tokenProperties.getTokenValidity());
         return Jwts.builder().setClaims(claims).setSubject(energyUser.getUsername()).setIssuedAt(issuedDate).setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, tokenProperties.getTokenSecret()).compact();

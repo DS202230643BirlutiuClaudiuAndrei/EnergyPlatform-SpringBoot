@@ -3,6 +3,7 @@ package dsrl.energy.controller;
 import dsrl.energy.config.security.TokenProvider;
 import dsrl.energy.dto.authentication.CredentialsDTO;
 import dsrl.energy.dto.authentication.InfoRegisterDTO;
+import dsrl.energy.dto.authentication.ResponseDTO;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.enums.EnergyUserRole;
 import dsrl.energy.service.UserService;
@@ -30,24 +31,25 @@ public class EnergyGeneralController {
     private final TokenProvider tokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid CredentialsDTO credentials) throws Exception {
+    public ResponseEntity<ResponseDTO> login(@RequestBody @Valid CredentialsDTO credentials) throws Exception {
 
         doAuthentication(credentials.getEmail(), credentials.getPassword());
 
         String token = tokenProvider.provideToken((EnergyUser) userService.loadUserByUsername(credentials.getEmail()));
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        ResponseDTO responseDTO = ResponseDTO.builder().token(token).build();
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid InfoRegisterDTO infoRegisterDTO) throws Exception {
+    public ResponseEntity<ResponseDTO> register(@RequestBody @Valid InfoRegisterDTO infoRegisterDTO) throws Exception {
 
         //create an account
         String email = userService.registerNewUser(infoRegisterDTO, EnergyUserRole.CLIENT);
 
         doAuthentication(email, infoRegisterDTO.getPassword());
         String token = tokenProvider.provideToken((EnergyUser) userService.loadUserByUsername(email));
-
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        ResponseDTO responseDTO = ResponseDTO.builder().token(token).build();
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
 
