@@ -1,6 +1,7 @@
 package dsrl.energy.controller;
 
 import dsrl.energy.dto.ClientToEditDTO;
+import dsrl.energy.dto.PostResponseDTO;
 import dsrl.energy.dto.authentication.InfoRegisterDTO;
 import dsrl.energy.model.enums.EnergyUserRole;
 import dsrl.energy.service.UserService;
@@ -26,9 +27,10 @@ public class UserController {
 
     @PostMapping(path = "/admin/create-client")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> createNewClient(@RequestBody @Valid InfoRegisterDTO infoRegisterDTO) {
-        userService.registerNewUser(infoRegisterDTO, EnergyUserRole.CLIENT);
-        return new ResponseEntity<>("Success", HttpStatus.CREATED);
+    public ResponseEntity<PostResponseDTO> createNewClient(@RequestBody @Valid InfoRegisterDTO infoRegisterDTO) {
+        String email = userService.registerNewUser(infoRegisterDTO, EnergyUserRole.CLIENT);
+        PostResponseDTO postResponseDTO = PostResponseDTO.builder().message("Success creating user with email " +email).build();
+        return new ResponseEntity<>(postResponseDTO, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/client)")
@@ -38,8 +40,8 @@ public class UserController {
     }
 
     @GetMapping(path = "/client")
-    public ResponseEntity<Map<String, Object>> getAllClients(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "3") int pageSize) {
-
+    public ResponseEntity<Map<String, Object>> getAllClients(@RequestParam(name="pageNumber",defaultValue = "0") int pageNumber, @RequestParam(name="pageSize",defaultValue = "3") int pageSize) {
+        System.out.println(pageNumber + " " + pageSize);
         Map<String, Object> response = userService.fetchAllClients(pageSize, pageNumber);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
