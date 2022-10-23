@@ -1,8 +1,11 @@
 package dsrl.energy.controller;
 
+import dsrl.energy.config.security.AccessDeniedHandler;
+import dsrl.energy.config.security.exception.InvalidToken;
 import dsrl.energy.service.exception.ConstraintViolationException;
 import dsrl.energy.service.exception.ErrorDetails;
 import dsrl.energy.service.exception.ResourceNotFoundException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +34,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> resourceNotFoundException(ConstraintViolationException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(InvalidToken.class)
+    public ResponseEntity<?> invalidToken(InvalidToken ex, WebRequest request){
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), "asdasd", request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> invalidToken(AccessDeniedException ex, WebRequest request){
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), "asdasd", request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
 
     @Override

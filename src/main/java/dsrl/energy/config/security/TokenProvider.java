@@ -1,9 +1,11 @@
 package dsrl.energy.config.security;
 
 import dsrl.energy.config.general.TokenProperties;
+import dsrl.energy.config.security.exception.InvalidToken;
 import dsrl.energy.model.entity.EnergyUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,7 +45,13 @@ public class TokenProvider implements Serializable {
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsTFunction) {
-        Claims claims = Jwts.parser().setSigningKey(tokenProperties.getTokenSecret()).parseClaimsJws(token).getBody();
+        Claims claims = null;
+        try {
+            claims = Jwts.parser().setSigningKey(tokenProperties.getTokenSecret()).parseClaimsJws(token).getBody();
+        } catch (MalformedJwtException ex) {
+            throw new InvalidToken(ex.getMessage());
+        }
+
         return claimsTFunction.apply(claims);
     }
 

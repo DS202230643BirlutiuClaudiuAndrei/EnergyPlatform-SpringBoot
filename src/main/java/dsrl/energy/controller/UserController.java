@@ -4,7 +4,9 @@ import dsrl.energy.dto.ClientToEditDTO;
 import dsrl.energy.dto.PostResponseDTO;
 import dsrl.energy.dto.PutResponseDTO;
 import dsrl.energy.dto.authentication.InfoRegisterDTO;
+import dsrl.energy.dto.metteringdevice.MeteringDeviceDTO;
 import dsrl.energy.model.enums.EnergyUserRole;
+import dsrl.energy.service.MeteringDeviceService;
 import dsrl.energy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -55,6 +59,5 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
-
 
 }
