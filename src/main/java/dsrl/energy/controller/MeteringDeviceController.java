@@ -28,7 +28,7 @@ public class MeteringDeviceController {
         return new ResponseEntity<>(meteringDevices, HttpStatus.OK);
     }
 
-    @GetMapping("/metering-device")
+    @PostMapping("/metering-device")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<PostResponseDTO> createNewMeteringDevice(@RequestBody @Valid PostMeteringDeviceDTO postMeteringDeviceDTO) {
         meteringDeviceService.createDevice(postMeteringDeviceDTO);
