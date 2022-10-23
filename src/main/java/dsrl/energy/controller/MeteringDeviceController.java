@@ -1,6 +1,6 @@
 package dsrl.energy.controller;
 
-import dsrl.energy.dto.PostResponseDTO;
+import dsrl.energy.dto.httpresponse.PostResponseDTO;
 import dsrl.energy.dto.metteringdevice.MeteringDeviceDTO;
 import dsrl.energy.dto.metteringdevice.PostMeteringDeviceDTO;
 import dsrl.energy.service.MeteringDeviceService;

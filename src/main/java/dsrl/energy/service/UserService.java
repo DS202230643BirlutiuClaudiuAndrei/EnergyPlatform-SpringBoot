@@ -6,9 +6,12 @@ import dsrl.energy.dto.authentication.InfoRegisterDTO;
 import dsrl.energy.dto.authentication.UserAuthMapper;
 import dsrl.energy.dto.mapper.UserMapper;
 import dsrl.energy.model.entity.EnergyUser;
+import dsrl.energy.model.entity.MeteringDevice;
 import dsrl.energy.model.enums.EnergyUserRole;
 import dsrl.energy.repository.EnergyUserRepository;
+import dsrl.energy.repository.MeteringDeviceRepository;
 import dsrl.energy.service.exception.ConstraintViolationException;
+import dsrl.energy.service.exception.DeleteException;
 import dsrl.energy.service.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -35,6 +39,7 @@ import java.util.Map;
 public class UserService implements UserDetailsService {
     private final EnergyUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MeteringDeviceRepository meteringDeviceRepository;
 
     /**
      * This method is called to register a new energy user in application
@@ -64,7 +69,7 @@ public class UserService implements UserDetailsService {
      */
     public Map<String, Object> fetchAllClients(int pageSize, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
-        Page<EnergyUser> retrievedData = userRepository.findByRole(EnergyUserRole.CLIENT,pageable);
+        Page<EnergyUser> retrievedData = userRepository.findByRole(EnergyUserRole.CLIENT, pageable);
 
         List<ClientInfoDTO> clientInfoDTOList = retrievedData.stream().map(UserMapper::clientToDTO).toList();
         Map<String, Object> response = new HashMap<>();
@@ -86,5 +91,22 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    }
+
+    public void deleteUser(UUID userId) {
+        //set all devices associated to null
+        List<MeteringDevice> meteringDevices = meteringDeviceRepository.findByOwnerId(userId);
+
+        try {
+            meteringDevices.forEach(meteringDevice -> {
+                meteringDevice.setOwner(null);
+                meteringDeviceRepository.saveAndFlush(meteringDevice);
+            });
+            userRepository.deleteById(userId);
+        } catch (Exception exc) {
+            log.error("Could not delete user" + exc.getMessage());
+            throw new DeleteException("Could not delete the user");
+        }
+
     }
 }

@@ -1,12 +1,11 @@
 package dsrl.energy.controller;
 
 import dsrl.energy.dto.ClientToEditDTO;
-import dsrl.energy.dto.PostResponseDTO;
-import dsrl.energy.dto.PutResponseDTO;
+import dsrl.energy.dto.httpresponse.DeleteResponseDTO;
+import dsrl.energy.dto.httpresponse.PostResponseDTO;
+import dsrl.energy.dto.httpresponse.PutResponseDTO;
 import dsrl.energy.dto.authentication.InfoRegisterDTO;
-import dsrl.energy.dto.metteringdevice.MeteringDeviceDTO;
 import dsrl.energy.model.enums.EnergyUserRole;
-import dsrl.energy.service.MeteringDeviceService;
 import dsrl.energy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -53,10 +51,17 @@ public class UserController {
 
 
     @GetMapping(path = "/client")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Map<String, Object>> getAllClients(@RequestParam(name="pageNumber",defaultValue = "0") int pageNumber, @RequestParam(name="pageSize",defaultValue = "3") int pageSize) {
         Map<String, Object> response = userService.fetchAllClients(pageSize, pageNumber);
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
 
+    @DeleteMapping(path = "/admin/client")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<DeleteResponseDTO> deleteClient(@RequestParam(name="id") UUID userId) {
+        userService.deleteUser(userId);
+        DeleteResponseDTO deleteResponseDTO = new DeleteResponseDTO("User deleted successfully");
+        return new ResponseEntity<>(deleteResponseDTO, HttpStatus.OK);
+    }
 }

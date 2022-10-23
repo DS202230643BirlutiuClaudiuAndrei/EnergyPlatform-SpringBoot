@@ -3,6 +3,7 @@ package dsrl.energy.controller;
 import dsrl.energy.config.security.AccessDeniedHandler;
 import dsrl.energy.config.security.exception.InvalidToken;
 import dsrl.energy.service.exception.ConstraintViolationException;
+import dsrl.energy.service.exception.DeleteException;
 import dsrl.energy.service.exception.ErrorDetails;
 import dsrl.energy.service.exception.ResourceNotFoundException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -45,6 +46,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> invalidToken(AccessDeniedException ex, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), "asdasd", request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(DeleteException.class)
+    public ResponseEntity<?> invalidToken(DeleteException ex, WebRequest request){
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
     @Override
