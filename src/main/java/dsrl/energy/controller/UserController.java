@@ -54,7 +54,6 @@ public class UserController {
 
     @GetMapping(path = "/client")
     public ResponseEntity<Map<String, Object>> getAllClients(@RequestParam(name="pageNumber",defaultValue = "0") int pageNumber, @RequestParam(name="pageSize",defaultValue = "3") int pageSize) {
-        System.out.println(pageNumber + " " + pageSize);
         Map<String, Object> response = userService.fetchAllClients(pageSize, pageNumber);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
