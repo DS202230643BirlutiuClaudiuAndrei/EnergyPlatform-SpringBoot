@@ -9,7 +9,7 @@ public final class MeteringDeviceMapper {
         return MeteringDeviceDTO.builder()
                 .address(meteringDevice.getAddress())
                 .description(meteringDevice.getDescription())
-                .uuid(meteringDevice.getId())
+                .id(meteringDevice.getId())
                 .maxHourlyConsumption(meteringDevice.getMaxHourlyConsumption())
                 .build();
     }

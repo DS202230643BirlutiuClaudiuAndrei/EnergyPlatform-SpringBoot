@@ -11,8 +11,9 @@ import java.util.UUID;
 @Builder
 public class MeteringDeviceDTO {
 
-    private UUID uuid;
+    private UUID id;
     private String description;
     private String address;
     private Double maxHourlyConsumption;
+
 }

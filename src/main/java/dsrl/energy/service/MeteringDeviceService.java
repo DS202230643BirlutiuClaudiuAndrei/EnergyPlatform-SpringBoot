@@ -1,6 +1,9 @@
 package dsrl.energy.service;
 
 
+import dsrl.energy.dto.ClientInfoDTO;
+import dsrl.energy.dto.mapper.UserMapper;
+import dsrl.energy.dto.metteringdevice.DeviceManagementDTO;
 import dsrl.energy.dto.metteringdevice.MeteringDeviceDTO;
 import dsrl.energy.dto.metteringdevice.MeteringDeviceMapper;
 import dsrl.energy.dto.metteringdevice.PostMeteringDeviceDTO;
@@ -10,10 +13,16 @@ import dsrl.energy.service.exception.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,5 +51,23 @@ public class MeteringDeviceService {
             log.error(exc.getMessage());
             throw new ConstraintViolationException("Could not save the metering device");
         }
+    }
+
+    public Map<String, Object> fetchAllMeteringDevices(int pageSize, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("maxHourlyConsumption"));
+        Page<MeteringDevice> retrievedData = meteringDeviceRepository.findAll(pageable);
+        List<DeviceManagementDTO> meteringDevices = retrievedData.getContent().stream().map(meteringDevice -> {
+            MeteringDeviceDTO meteringDeviceDTO = MeteringDeviceMapper.toDTO(meteringDevice);
+            ClientInfoDTO clientInfoDTO = meteringDevice.getOwner() != null ? UserMapper.clientToDTO(meteringDevice.getOwner()) : null;
+            return new DeviceManagementDTO(meteringDeviceDTO, clientInfoDTO);
+        }).toList();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("meteringDevices", meteringDevices);
+        response.put("currentPage", retrievedData.getNumber());
+        response.put("totalItems", retrievedData.getTotalElements());
+        response.put("totalPages", retrievedData.getTotalPages());
+
+        return response;
     }
 }
