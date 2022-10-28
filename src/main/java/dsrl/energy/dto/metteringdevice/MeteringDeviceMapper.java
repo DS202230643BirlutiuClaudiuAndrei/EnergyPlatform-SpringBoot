@@ -13,4 +13,5 @@ public final class MeteringDeviceMapper {
                 .maxHourlyConsumption(meteringDevice.getMaxHourlyConsumption())
                 .build();
     }
+
 }

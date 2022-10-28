@@ -3,13 +3,13 @@ package dsrl.energy.service;
 
 import dsrl.energy.dto.ClientInfoDTO;
 import dsrl.energy.dto.mapper.UserMapper;
-import dsrl.energy.dto.metteringdevice.DeviceManagementDTO;
-import dsrl.energy.dto.metteringdevice.MeteringDeviceDTO;
-import dsrl.energy.dto.metteringdevice.MeteringDeviceMapper;
-import dsrl.energy.dto.metteringdevice.PostMeteringDeviceDTO;
+import dsrl.energy.dto.metteringdevice.*;
+import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.entity.MeteringDevice;
+import dsrl.energy.repository.EnergyUserRepository;
 import dsrl.energy.repository.MeteringDeviceRepository;
 import dsrl.energy.service.exception.ConstraintViolationException;
+import dsrl.energy.service.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 public class MeteringDeviceService {
 
     private final MeteringDeviceRepository meteringDeviceRepository;
+    private final EnergyUserRepository energyUserRepository;
 
     public List<MeteringDeviceDTO> getMeteringDevices(UUID userID) {
         List<MeteringDevice> meteringDevices = meteringDeviceRepository.findByOwnerId(userID);
@@ -87,5 +88,29 @@ public class MeteringDeviceService {
             log.error("An error occurred while deleting the device message=" + exc.getMessage());
             throw new ConstraintViolationException("The device could not be deleted");
         }
+    }
+
+    /**
+     * This method is used to update the device information or to set a new owner for device
+     * @param deviceDTO the information provided for update
+     */
+    public void updateDevice(PutMeteringDeviceDTO deviceDTO) {
+        MeteringDevice meteringDevice = meteringDeviceRepository.findById(deviceDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Device", "id", deviceDTO.getId().toString()));
+
+        EnergyUser owner = deviceDTO.getOwner() != null ?
+                energyUserRepository.findById(deviceDTO.getId()).orElseThrow(
+                        () -> new ResourceNotFoundException("User", "id", deviceDTO.getOwner().toString())) : null;
+        meteringDevice.setOwner(owner);
+        meteringDevice.setDescription(deviceDTO.getDescription());
+        meteringDevice.setAddress(meteringDevice.getAddress());
+        meteringDevice.setMaxHourlyConsumption(deviceDTO.getMaxHourlyConsumption());
+        try {
+            meteringDeviceRepository.saveAndFlush(meteringDevice);
+        } catch (DataIntegrityViolationException exc) {
+            log.error("Occurred while deleting the device; message=" + exc.getMessage());
+            throw new ConstraintViolationException("Error occurred while deleting the device");
+        }
+
     }
 }

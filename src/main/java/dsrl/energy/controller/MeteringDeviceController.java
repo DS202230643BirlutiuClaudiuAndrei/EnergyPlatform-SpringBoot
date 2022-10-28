@@ -2,8 +2,10 @@ package dsrl.energy.controller;
 
 import dsrl.energy.dto.httpresponse.DeleteResponseDTO;
 import dsrl.energy.dto.httpresponse.PostResponseDTO;
+import dsrl.energy.dto.httpresponse.PutResponseDTO;
 import dsrl.energy.dto.metteringdevice.MeteringDeviceDTO;
 import dsrl.energy.dto.metteringdevice.PostMeteringDeviceDTO;
+import dsrl.energy.dto.metteringdevice.PutMeteringDeviceDTO;
 import dsrl.energy.service.MeteringDeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,6 +46,14 @@ public class MeteringDeviceController {
         meteringDeviceService.deleteDevice(deviceId);
         DeleteResponseDTO deleteResponseDTO = new DeleteResponseDTO("The device was deleted successfully");
         return new ResponseEntity<>(deleteResponseDTO, HttpStatus.OK);
+    }
+
+    @PutMapping("/device")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<PutResponseDTO> updateDevice(@RequestBody PutMeteringDeviceDTO deviceDTO) {
+        meteringDeviceService.updateDevice(deviceDTO);
+        PutResponseDTO putResponseDTO = new PutResponseDTO("The device was updated successfully");
+        return new ResponseEntity<>(putResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping(path = "/device/all")
