@@ -41,7 +41,15 @@ public class MeteringDeviceService {
     }
 
     public void createDevice(PostMeteringDeviceDTO meteringDeviceDTO) {
-        MeteringDevice meteringDevice = MeteringDevice.builder().description(meteringDeviceDTO.getDescription()).address(meteringDeviceDTO.getAddress()).maxHourlyConsumption(meteringDeviceDTO.getMaxHourlyConsumption()).build();
+        EnergyUser energyUser = meteringDeviceDTO.getOwnerId() != null ?
+                energyUserRepository.findById(meteringDeviceDTO.getOwnerId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", meteringDeviceDTO.getOwnerId().toString()))
+                : null;
+        MeteringDevice meteringDevice = MeteringDevice.builder()
+                .description(meteringDeviceDTO.getDescription())
+                .address(meteringDeviceDTO.getAddress())
+                .maxHourlyConsumption(meteringDeviceDTO.getMaxHourlyConsumption())
+                .owner(energyUser)
+                .build();
         try {
             meteringDeviceRepository.saveAndFlush(meteringDevice);
         } catch (DataIntegrityViolationException exc) {
@@ -92,15 +100,13 @@ public class MeteringDeviceService {
 
     /**
      * This method is used to update the device information or to set a new owner for device
+     *
      * @param deviceDTO the information provided for update
      */
     public void updateDevice(PutMeteringDeviceDTO deviceDTO) {
-        MeteringDevice meteringDevice = meteringDeviceRepository.findById(deviceDTO.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Device", "id", deviceDTO.getId().toString()));
+        MeteringDevice meteringDevice = meteringDeviceRepository.findById(deviceDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Device", "id", deviceDTO.getId().toString()));
 
-        EnergyUser owner = deviceDTO.getOwner() != null ?
-                energyUserRepository.findById(deviceDTO.getOwner()).orElseThrow(
-                        () -> new ResourceNotFoundException("User", "id", deviceDTO.getOwner().toString())) : null;
+        EnergyUser owner = deviceDTO.getOwner() != null ? energyUserRepository.findById(deviceDTO.getOwner()).orElseThrow(() -> new ResourceNotFoundException("User", "id", deviceDTO.getOwner().toString())) : null;
         meteringDevice.setOwner(owner);
         meteringDevice.setDescription(deviceDTO.getDescription());
         meteringDevice.setAddress(meteringDevice.getAddress());

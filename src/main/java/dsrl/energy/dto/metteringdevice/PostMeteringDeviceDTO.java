@@ -3,6 +3,7 @@ package dsrl.energy.dto.metteringdevice;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,4 +17,5 @@ public class PostMeteringDeviceDTO {
     private String address;
     @NotNull
     private Double maxHourlyConsumption;
+    private UUID ownerId;
 }
