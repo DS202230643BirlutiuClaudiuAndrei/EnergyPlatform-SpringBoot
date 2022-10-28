@@ -1,6 +1,7 @@
 package dsrl.energy.controller;
 
-import dsrl.energy.dto.ClientToEditDTO;
+import dsrl.energy.dto.energyuser.ClientToEditDTO;
+import dsrl.energy.dto.energyuser.DeviceOwnerSelectDTO;
 import dsrl.energy.dto.httpresponse.DeleteResponseDTO;
 import dsrl.energy.dto.httpresponse.PostResponseDTO;
 import dsrl.energy.dto.httpresponse.PutResponseDTO;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -63,5 +65,16 @@ public class UserController {
         userService.deleteUser(userId);
         DeleteResponseDTO deleteResponseDTO = new DeleteResponseDTO("User deleted successfully");
         return new ResponseEntity<>(deleteResponseDTO, HttpStatus.OK);
+    }
+
+    /**
+     * This endpoint is used to fetch all users from db which can be mapped to be owner to a device
+     * @return a list of energy user (client)
+     */
+    @GetMapping(path = "/possible-owners")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<DeviceOwnerSelectDTO>> getPossibleOwners() {
+        List<DeviceOwnerSelectDTO> deviceOwnerSelectDTOS = userService.getPossibleDeviceOwners();
+        return new ResponseEntity<>(deviceOwnerSelectDTOS, HttpStatus.OK);
     }
 }

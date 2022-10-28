@@ -1,10 +1,11 @@
 package dsrl.energy.service;
 
-import dsrl.energy.dto.ClientInfoDTO;
-import dsrl.energy.dto.ClientToEditDTO;
 import dsrl.energy.dto.authentication.InfoRegisterDTO;
 import dsrl.energy.dto.authentication.UserAuthMapper;
-import dsrl.energy.dto.mapper.UserMapper;
+import dsrl.energy.dto.energyuser.ClientInfoDTO;
+import dsrl.energy.dto.energyuser.ClientToEditDTO;
+import dsrl.energy.dto.energyuser.DeviceOwnerSelectDTO;
+import dsrl.energy.dto.energyuser.UserMapper;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.entity.MeteringDevice;
 import dsrl.energy.model.enums.EnergyUserRole;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -108,5 +110,15 @@ public class UserService implements UserDetailsService {
             throw new DeleteException("Could not delete the user");
         }
 
+    }
+
+    /**
+     * This method is used to fetch all users from db which can be mapped to be owner to a device
+     *
+     * @return a list of possible device owners
+     */
+    public List<DeviceOwnerSelectDTO> getPossibleDeviceOwners() {
+        List<EnergyUser> owners = userRepository.findByRole(EnergyUserRole.CLIENT);
+        return owners.stream().map(UserMapper::ownerToDTO).collect(Collectors.toList());
     }
 }

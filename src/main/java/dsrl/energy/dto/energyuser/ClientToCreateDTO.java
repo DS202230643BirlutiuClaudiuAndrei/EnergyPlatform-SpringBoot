@@ -1,22 +1,18 @@
-package dsrl.energy.dto;
-
+package dsrl.energy.dto.energyuser;
 
 import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ClientToEditDTO {
+public class ClientToCreateDTO {
 
-    @NotNull
-    private UUID id;
     @NotNull
     @Size(min = 1, max = 100)
     private String firstName;

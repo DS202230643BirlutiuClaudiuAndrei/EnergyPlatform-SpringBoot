@@ -1,4 +1,4 @@
-package dsrl.energy.dto;
+package dsrl.energy.dto.energyuser;
 
 import lombok.*;
 

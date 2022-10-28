@@ -1,9 +1,7 @@
 package dsrl.energy.dto.metteringdevice;
 
-import dsrl.energy.dto.ClientInfoDTO;
+import dsrl.energy.dto.energyuser.ClientInfoDTO;
 import lombok.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,8 +1,6 @@
-package dsrl.energy.dto.mapper;
+package dsrl.energy.dto.energyuser;
 
 
-import dsrl.energy.dto.ClientInfoDTO;
-import dsrl.energy.dto.ClientToCreateDTO;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.enums.EnergyUserRole;
 
@@ -26,5 +24,11 @@ public final class UserMapper {
                 .build();
     }
 
+    public static DeviceOwnerSelectDTO ownerToDTO(EnergyUser client) {
+        return DeviceOwnerSelectDTO.builder()
+                .email(client.getEmail())
+                .ownerId(client.getId())
+                .build();
+    }
 
 }

@@ -1,8 +1,8 @@
 package dsrl.energy.service;
 
 
-import dsrl.energy.dto.ClientInfoDTO;
-import dsrl.energy.dto.mapper.UserMapper;
+import dsrl.energy.dto.energyuser.ClientInfoDTO;
+import dsrl.energy.dto.energyuser.UserMapper;
 import dsrl.energy.dto.metteringdevice.*;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.entity.MeteringDevice;
