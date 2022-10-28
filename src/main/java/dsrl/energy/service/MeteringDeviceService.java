@@ -99,7 +99,7 @@ public class MeteringDeviceService {
                 .orElseThrow(() -> new ResourceNotFoundException("Device", "id", deviceDTO.getId().toString()));
 
         EnergyUser owner = deviceDTO.getOwner() != null ?
-                energyUserRepository.findById(deviceDTO.getId()).orElseThrow(
+                energyUserRepository.findById(deviceDTO.getOwner()).orElseThrow(
                         () -> new ResourceNotFoundException("User", "id", deviceDTO.getOwner().toString())) : null;
         meteringDevice.setOwner(owner);
         meteringDevice.setDescription(deviceDTO.getDescription());
