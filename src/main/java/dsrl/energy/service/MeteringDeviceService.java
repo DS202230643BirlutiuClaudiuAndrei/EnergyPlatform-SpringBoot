@@ -40,11 +40,7 @@ public class MeteringDeviceService {
     }
 
     public void createDevice(PostMeteringDeviceDTO meteringDeviceDTO) {
-        MeteringDevice meteringDevice = MeteringDevice.builder()
-                .description(meteringDeviceDTO.getDescription())
-                .address(meteringDeviceDTO.getAddress())
-                .maxHourlyConsumption(meteringDeviceDTO.getMaxHourlyConsumption())
-                .build();
+        MeteringDevice meteringDevice = MeteringDevice.builder().description(meteringDeviceDTO.getDescription()).address(meteringDeviceDTO.getAddress()).maxHourlyConsumption(meteringDeviceDTO.getMaxHourlyConsumption()).build();
         try {
             meteringDeviceRepository.saveAndFlush(meteringDevice);
         } catch (DataIntegrityViolationException exc) {
@@ -53,6 +49,14 @@ public class MeteringDeviceService {
         }
     }
 
+
+    /**
+     * This method returns a json object with the information used for pagination
+     *
+     * @param pageSize   the max item per page
+     * @param pageNumber the current page to be displayed
+     * @return a json object with the relevant information
+     */
     public Map<String, Object> fetchAllMeteringDevices(int pageSize, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("maxHourlyConsumption"));
         Page<MeteringDevice> retrievedData = meteringDeviceRepository.findAll(pageable);
@@ -69,5 +73,19 @@ public class MeteringDeviceService {
         response.put("totalPages", retrievedData.getTotalPages());
 
         return response;
+    }
+
+    /**
+     * This method deletes a device by id
+     *
+     * @param deviceId the id of the device
+     */
+    public void deleteDevice(UUID deviceId) {
+        try {
+            meteringDeviceRepository.deleteById(deviceId);
+        } catch (Exception exc) {
+            log.error("An error occurred while deleting the device message=" + exc.getMessage());
+            throw new ConstraintViolationException("The device could not be deleted");
+        }
     }
 }

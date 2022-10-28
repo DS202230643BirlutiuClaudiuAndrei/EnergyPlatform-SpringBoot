@@ -1,5 +1,6 @@
 package dsrl.energy.controller;
 
+import dsrl.energy.dto.httpresponse.DeleteResponseDTO;
 import dsrl.energy.dto.httpresponse.PostResponseDTO;
 import dsrl.energy.dto.metteringdevice.MeteringDeviceDTO;
 import dsrl.energy.dto.metteringdevice.PostMeteringDeviceDTO;
@@ -35,6 +36,14 @@ public class MeteringDeviceController {
         meteringDeviceService.createDevice(postMeteringDeviceDTO);
         PostResponseDTO postResponseDTO = new PostResponseDTO("Success in creating the device");
         return new ResponseEntity<>(postResponseDTO, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/device")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<DeleteResponseDTO> deleteDevice(@RequestParam("deviceId") UUID deviceId) {
+        meteringDeviceService.deleteDevice(deviceId);
+        DeleteResponseDTO deleteResponseDTO = new DeleteResponseDTO("The device was deleted successfully");
+        return new ResponseEntity<>(deleteResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping(path = "/device/all")
