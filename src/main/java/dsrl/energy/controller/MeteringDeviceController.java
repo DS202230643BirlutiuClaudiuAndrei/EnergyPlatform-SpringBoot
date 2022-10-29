@@ -58,8 +58,18 @@ public class MeteringDeviceController {
 
     @GetMapping(path = "/device/all")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Map<String, Object>> getAllMeteringDevices(@RequestParam(name="pageNumber",defaultValue = "0") int pageNumber, @RequestParam(name="pageSize",defaultValue = "3") int pageSize) {
+    public ResponseEntity<Map<String, Object>> getAllMeteringDevices(@RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                                                     @RequestParam(name = "pageSize", defaultValue = "3") int pageSize) {
         Map<String, Object> response = meteringDeviceService.fetchAllMeteringDevices(pageSize, pageNumber);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/owneddevice/all")
+    @PreAuthorize("hasAuthority('CLIENT')")
+    public ResponseEntity<Map<String, Object>> getOwnedDeviceAll(@RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "3") int pageSize,
+                                                                 @RequestParam(name = "userId") UUID userId) {
+        Map<String, Object> response = meteringDeviceService.fetAllOwnedDevices(pageSize, pageNumber, userId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

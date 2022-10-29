@@ -41,15 +41,8 @@ public class MeteringDeviceService {
     }
 
     public void createDevice(PostMeteringDeviceDTO meteringDeviceDTO) {
-        EnergyUser energyUser = meteringDeviceDTO.getOwnerId() != null ?
-                energyUserRepository.findById(meteringDeviceDTO.getOwnerId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", meteringDeviceDTO.getOwnerId().toString()))
-                : null;
-        MeteringDevice meteringDevice = MeteringDevice.builder()
-                .description(meteringDeviceDTO.getDescription())
-                .address(meteringDeviceDTO.getAddress())
-                .maxHourlyConsumption(meteringDeviceDTO.getMaxHourlyConsumption())
-                .owner(energyUser)
-                .build();
+        EnergyUser energyUser = meteringDeviceDTO.getOwnerId() != null ? energyUserRepository.findById(meteringDeviceDTO.getOwnerId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", meteringDeviceDTO.getOwnerId().toString())) : null;
+        MeteringDevice meteringDevice = MeteringDevice.builder().description(meteringDeviceDTO.getDescription()).address(meteringDeviceDTO.getAddress()).maxHourlyConsumption(meteringDeviceDTO.getMaxHourlyConsumption()).owner(energyUser).build();
         try {
             meteringDeviceRepository.saveAndFlush(meteringDevice);
         } catch (DataIntegrityViolationException exc) {
@@ -67,7 +60,7 @@ public class MeteringDeviceService {
      * @return a json object with the relevant information
      */
     public Map<String, Object> fetchAllMeteringDevices(int pageSize, int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("maxHourlyConsumption"));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("maxHourlyConsumption").and(Sort.by("description")));
         Page<MeteringDevice> retrievedData = meteringDeviceRepository.findAll(pageable);
         List<DeviceManagementDTO> meteringDevices = retrievedData.getContent().stream().map(meteringDevice -> {
             MeteringDeviceDTO meteringDeviceDTO = MeteringDeviceMapper.toDTO(meteringDevice);
@@ -118,5 +111,26 @@ public class MeteringDeviceService {
             throw new ConstraintViolationException("Error occurred while deleting the device");
         }
 
+    }
+
+    /**
+     * This method returns with pagination details about owned devices
+     *
+     * @param pageSize   the max items per page
+     * @param pageNumber the current page number
+     * @param userId     user id for which are search the owned devices
+     * @return a map with the needed fields
+     */
+    public Map<String, Object> fetAllOwnedDevices(int pageSize, int pageNumber, UUID userId) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("maxHourlyConsumption").and(Sort.by("description")));
+        Page<MeteringDevice> retrievedData = meteringDeviceRepository.findByOwnerId(userId, pageable);
+        List<MeteringDeviceDTO> meteringDeviceList = retrievedData.getContent().stream().map(MeteringDeviceMapper::toDTO).toList();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("meteringDevices", meteringDeviceList);
+        response.put("currentPage", retrievedData.getNumber());
+        response.put("totalItems", retrievedData.getTotalElements());
+        response.put("totalPages", retrievedData.getTotalPages());
+        return response;
     }
 }
