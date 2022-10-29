@@ -37,4 +37,7 @@ public class Measurement {
     @JoinColumn(name = "metering_device_id", nullable = false)
     private MeteringDevice meteringDevice;
 
+    @ManyToOne
+    @JoinColumn(name="for_energy_user")
+    private EnergyUser forEnergyUser;
 }

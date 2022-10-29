@@ -1,0 +1,37 @@
+INSERT INTO public.energy_users(
+    id, email, first_name, last_name, role, user_password)
+VALUES ('cb2bbe90-5764-11ed-9b6a-0242ac120002', 'dummy@dummy.client', 'Dummy','Client','CLIENT', '$2a$04$Fqp7tkeAOmrpIgHY.S/Y2OxxMhp/DH5NXKeoDYYz5PotSEcDyVwTq');
+INSERT INTO public.energy_metering_devices(
+    id, address, description, max_hourly_consumption, owner_id)
+VALUES ('cb2bba08-5764-11ed-9b6a-0242ac120002', 'Cluj-Napoca', 'Metering device Voltaj', '20.4','cb2bbe90-5764-11ed-9b6a-0242ac120002');
+
+INSERT INTO public.energy_metering_devices(
+    id, address, description, max_hourly_consumption, owner_id)
+VALUES ('69014630-5765-11ed-9b6a-0242ac120002', 'Cluj-Napoca', 'Metering device Voltaj', '20.4','cb2bbe90-5764-11ed-9b6a-0242ac120002');
+
+INSERT INTO public.measurements(
+    id, consumption, time_stamp, for_energy_user, metering_device_id)
+VALUES ('86cfeaee-5766-11ed-9b6a-0242ac120002', 6.75, '2022-10-29T00:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('ecb8d136-5766-11ed-9b6a-0242ac120002', 2.5, '2022-10-29T01:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('1addb73e-5767-11ed-9b6a-0242ac120002', 10.25, '2022-10-29T02:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('233597e4-5767-11ed-9b6a-0242ac120002', 9.5, '2022-10-29T03:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('280ac87a-5767-11ed-9b6a-0242ac120002', 8.5, '2022-10-29T04:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('2da888e4-5767-11ed-9b6a-0242ac120002', 13.45, '2022-10-29T05:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('322e16e0-5767-11ed-9b6a-0242ac120002', 17.95, '2022-10-29T06:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('39cc2018-5767-11ed-9b6a-0242ac120002', 18.35, '2022-10-29T07:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('3fe6ccbe-5767-11ed-9b6a-0242ac120002', 12.25, '2022-10-29T08:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('44d9eb34-5767-11ed-9b6a-0242ac120002', 11.8, '2022-10-29T09:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('4bdfc354-5767-11ed-9b6a-0242ac120002', 14.5, '2022-10-29T10:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('50981bc6-5767-11ed-9b6a-0242ac120002', 16.25, '2022-10-29T11:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('5539a1ae-5767-11ed-9b6a-0242ac120002', 21.45, '2022-10-29T12:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('5a873374-5767-11ed-9b6a-0242ac120002', 23.85, '2022-10-29T13:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('5f91cbfe-5767-11ed-9b6a-0242ac120002', 30.95, '2022-10-29T14:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('64177548-5767-11ed-9b6a-0242ac120002', 32.5, '2022-10-29T15:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('697e7b4e-5767-11ed-9b6a-0242ac120002', 31.25, '2022-10-29T16:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('6ec3a71e-5767-11ed-9b6a-0242ac120002', 33.5, '2022-10-29T17:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('72c37bbe-5767-11ed-9b6a-0242ac120002', 35.35, '2022-10-29T18:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('78d90366-5767-11ed-9b6a-0242ac120002', 37.85, '2022-10-29T19:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('7d8f60a8-5767-11ed-9b6a-0242ac120002', 40.5, '2022-10-29T20:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('82a05af2-5767-11ed-9b6a-0242ac120002', 45.5, '2022-10-29T21:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('8809da68-5767-11ed-9b6a-0242ac120002', 34.25, '2022-10-29T22:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002'),
+      ('8c7e9246-5767-11ed-9b6a-0242ac120002', 28.25, '2022-10-29T23:00','cb2bbe90-5764-11ed-9b6a-0242ac120002', 'cb2bba08-5764-11ed-9b6a-0242ac120002');
