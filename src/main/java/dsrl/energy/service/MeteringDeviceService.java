@@ -66,7 +66,7 @@ public class MeteringDeviceService {
             MeteringDeviceDTO meteringDeviceDTO = MeteringDeviceMapper.toDTO(meteringDevice);
             ClientInfoDTO clientInfoDTO = meteringDevice.getOwner() != null ? UserMapper.clientToDTO(meteringDevice.getOwner()) : null;
             return new DeviceManagementDTO(meteringDeviceDTO, clientInfoDTO);
-        }).collect(Collectors.toList());;
+        }).collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
         response.put("meteringDevices", meteringDevices);
