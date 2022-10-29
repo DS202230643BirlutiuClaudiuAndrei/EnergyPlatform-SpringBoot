@@ -12,11 +12,11 @@ RUN ls -l /root
 FROM openjdk:11.0.6-jre
 
 ENV TZ=UTC
-ENV DB_IP=ec2-52-48-65-240.eu-west-1.compute.amazonaws.com
+ENV DB_IP=db
 ENV DB_PORT=5432
-ENV DB_USER=wlryktxyqpyomt
-ENV DB_PASSWORD=bee98a2afc7f0c3bcdd7df60ee7278ec5fa5cb4fb06a4039b1ffb1107d5851fd
-ENV DB_DBNAME=devidei2vqv0v4
+ENV DB_USER=postgres
+ENV DB_PASSWORD=postgres
+ENV DB_DBNAME=energy_monitoring_db
 
 
 COPY --from=builder /root/dependencies/ ./

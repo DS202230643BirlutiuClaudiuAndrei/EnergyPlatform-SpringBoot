@@ -66,7 +66,7 @@ public class MeteringDeviceService {
             MeteringDeviceDTO meteringDeviceDTO = MeteringDeviceMapper.toDTO(meteringDevice);
             ClientInfoDTO clientInfoDTO = meteringDevice.getOwner() != null ? UserMapper.clientToDTO(meteringDevice.getOwner()) : null;
             return new DeviceManagementDTO(meteringDeviceDTO, clientInfoDTO);
-        }).toList();
+        }).collect(Collectors.toList());;
 
         Map<String, Object> response = new HashMap<>();
         response.put("meteringDevices", meteringDevices);
@@ -124,7 +124,7 @@ public class MeteringDeviceService {
     public Map<String, Object> fetAllOwnedDevices(int pageSize, int pageNumber, UUID userId) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("maxHourlyConsumption").and(Sort.by("description")));
         Page<MeteringDevice> retrievedData = meteringDeviceRepository.findByOwnerId(userId, pageable);
-        List<MeteringDeviceDTO> meteringDeviceList = retrievedData.getContent().stream().map(MeteringDeviceMapper::toDTO).toList();
+        List<MeteringDeviceDTO> meteringDeviceList = retrievedData.getContent().stream().map(MeteringDeviceMapper::toDTO).collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
         response.put("meteringDevices", meteringDeviceList);

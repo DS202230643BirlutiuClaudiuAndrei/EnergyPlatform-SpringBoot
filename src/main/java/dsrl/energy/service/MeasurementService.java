@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,7 +36,7 @@ public class MeasurementService {
         LocalDateTime startDate = day.truncatedTo(ChronoUnit.DAYS);
         LocalDateTime endDate = day.truncatedTo(ChronoUnit.DAYS).plusDays(1).minusMinutes(1);
         List<Measurement> measurements = measurementRepository.findMeasurementsByDeviceAndClientPerDay(deviceId, ownerId, startDate, endDate);
-        return measurements.stream().map(ChartDataMapper::toDto).toList();
+        return measurements.stream().map(ChartDataMapper::toDto).collect(Collectors.toList());
 
     }
 }

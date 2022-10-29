@@ -73,7 +73,7 @@ public class UserService implements UserDetailsService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
         Page<EnergyUser> retrievedData = userRepository.findByRole(EnergyUserRole.CLIENT, pageable);
 
-        List<ClientInfoDTO> clientInfoDTOList = retrievedData.stream().map(UserMapper::clientToDTO).toList();
+        List<ClientInfoDTO> clientInfoDTOList = retrievedData.stream().map(UserMapper::clientToDTO).collect(Collectors.toList());
         Map<String, Object> response = new HashMap<>();
         response.put("energyUsers", clientInfoDTOList);
         response.put("currentPage", retrievedData.getNumber());
