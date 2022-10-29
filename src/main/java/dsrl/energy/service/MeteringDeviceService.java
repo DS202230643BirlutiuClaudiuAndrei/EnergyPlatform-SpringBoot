@@ -126,11 +126,11 @@ public class MeteringDeviceService {
         Page<MeteringDevice> retrievedData = meteringDeviceRepository.findByOwnerId(userId, pageable);
         List<MeteringDeviceDTO> meteringDeviceList = retrievedData.getContent().stream().map(MeteringDeviceMapper::toDTO).collect(Collectors.toList());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("meteringDevices", meteringDeviceList);
-        response.put("currentPage", retrievedData.getNumber());
-        response.put("totalItems", retrievedData.getTotalElements());
-        response.put("totalPages", retrievedData.getTotalPages());
-        return response;
+        Map<String, Object> r = new HashMap<>();
+        r.put("currentPage",retrievedData.getNumber());
+        r.put("totalItems", retrievedData.getTotalElements());
+        r.put("totalPages", retrievedData.getTotalPages());
+        r.put("meteringDevices", meteringDeviceList);
+        return r;
     }
 }
