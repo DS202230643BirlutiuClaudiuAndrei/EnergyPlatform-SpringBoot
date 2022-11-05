@@ -21,7 +21,6 @@ services:
 
   demo-be:
     image: energyplatformclaudiubirlutiu30643.azurecr.io/claudiubirlutiu30643backend
-    restart: always
     ports:
       - "8080:8080"
     environment:
