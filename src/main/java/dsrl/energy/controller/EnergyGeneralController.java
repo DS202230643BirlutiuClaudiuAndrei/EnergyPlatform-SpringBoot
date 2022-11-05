@@ -37,7 +37,7 @@ public class EnergyGeneralController {
 
         String token = tokenProvider.provideToken((EnergyUser) userService.loadUserByUsername(credentials.getEmail()));
         ResponseDTO responseDTO = ResponseDTO.builder().token(token).build();
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping("/register")
