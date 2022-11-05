@@ -3,15 +3,15 @@ version: '3'
 services:
 
   demo-db:
-    image: containerregistrynamelastnamegroupnumber.azurecr.io/db
+    image: energyplatformclaudiubirlutiu30643.azurecr.io/db
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
       timeout: 45s
       interval: 10s
       retries: 5
     restart: always
     environment:
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=root
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=energy_monitoring_db
       - POSTGRES_HOST_AUTH_METHOD=trust
@@ -20,7 +20,7 @@ services:
     container_name: demo-db
 
   demo-be:
-    image: containerregistrynamelastnamegroupnumber.azurecr.io/namelastnamegroupnumberbackend
+    image: energyplatformclaudiubirlutiu30643.azurecr.io/claudiubirlutiu30643backend
     restart: always
     ports:
       - "8080:8080"
