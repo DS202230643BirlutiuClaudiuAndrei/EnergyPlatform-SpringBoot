@@ -4,7 +4,7 @@ COPY ./src/ /root/src
 COPY ./pom.xml /root/
 COPY ./checkstyle.xml /root/
 WORKDIR /root
-RUN mvn package
+RUN mvn package -DskipsTest
 RUN java -Djarmode=layertools -jar /root/target/energy-0.0.1-SNAPSHOT.jar list
 RUN java -Djarmode=layertools -jar /root/target/energy-0.0.1-SNAPSHOT.jar extract
 RUN ls -l /root

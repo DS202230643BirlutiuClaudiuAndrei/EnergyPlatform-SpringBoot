@@ -2,7 +2,34 @@ version: '3'
 
 services:
 
-  tomcat-db-api:
-    image: energy_backend
+  demo-db:
+    image: containerregistrynamelastnamegroupnumber.azurecr.io/db
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      timeout: 45s
+      interval: 10s
+      retries: 5
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=energy_monitoring_db
+      - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
-       - "8080:8080"
+      - "5432:5432"
+    container_name: demo-db
+
+  demo-be:
+    image: containerregistrynamelastnamegroupnumber.azurecr.io/namelastnamegroupnumberbackend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      #- DB_IP=172.22.0.2
+      - DB_IP=demo-db
+      - DB_PORT=5432
+      - DB_USER=root
+      - DB_PASSWORD=postgres
+      - DB_DBNAME=energy_monitoring_db
+    depends_on:
+    - demo-db
