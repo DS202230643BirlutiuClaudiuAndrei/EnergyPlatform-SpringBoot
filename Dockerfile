@@ -12,7 +12,7 @@ RUN ls -l /root
 FROM openjdk:11.0.6-jre
 
 ENV TZ=UTC
-ENV DB_IP=db
+ENV DB_IP=localhost
 ENV DB_PORT=5432
 ENV DB_USER=postgres
 ENV DB_PASSWORD=postgres
