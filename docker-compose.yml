@@ -24,11 +24,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_IP=demo-db
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_DBNAME=energy_monitoring_db
+      - DATABASE_IP=demo-db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_DBNAME=energy_monitoring_db
     depends_on:
       - demo-db
 
