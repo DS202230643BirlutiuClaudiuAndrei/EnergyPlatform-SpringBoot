@@ -5,13 +5,13 @@ services:
   demo-db:
     image: energyplatformclaudiubirlutiu30643.azurecr.io/db
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
       timeout: 45s
       interval: 10s
       retries: 5
     restart: always
     environment:
-      - POSTGRES_USER=root
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=energy_monitoring_db
       - POSTGRES_HOST_AUTH_METHOD=trust
@@ -26,7 +26,7 @@ services:
     environment:
       - DB_IP=demo-db
       - DB_PORT=5432
-      - DB_USER=root
+      - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_DBNAME=energy_monitoring_db
     depends_on:
