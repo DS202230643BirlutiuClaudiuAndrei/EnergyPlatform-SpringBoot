@@ -23,29 +23,6 @@ stages:
   - stage: Build
     displayName: Build stage
     jobs:
-      - job: CodeCoverage
-        displayName: Code Coverage
-        pool:
-          name: local
-        steps:
-          - task: Maven@3
-            inputs:
-              mavenPomFile: "pom.xml"
-              publishJUnitResults: true
-              testResultsFiles: "**/surefire-reports/TEST-*.xml"
-              codeCoverageToolOption: "JaCoCo"
-              codeCoverageFailIfEmpty: true
-              javaHomeOption: "JDKVersion"
-              mavenVersionOption: "Default"
-              mavenAuthenticateFeed: false
-              effectivePomSkip: false
-              sonarQubeRunAnalysis: false
-              checkStyleRunAnalysis: true
-          - task: PublishCodeCoverageResults@1
-            displayName: "Publish publish code coverage"
-            inputs:
-              summaryFileLocation: $(System.DefaultWorkingDirectory)/target/site/jacoco/jacoco.xml
-              pathToSources: $(System.DefaultWorkingDirectory)/src/main/java/
       - job: Build
         displayName: Build
         pool:
