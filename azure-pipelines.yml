@@ -41,16 +41,6 @@ stages:
               effectivePomSkip: false
               sonarQubeRunAnalysis: false
               checkStyleRunAnalysis: true
-          - task: Maven@3
-            displayName: "Maven Test"
-            inputs:
-              mavenPomFile: "pom.xml"
-              goals: "test"
-          - task: PublishTestResults@2
-            displayName: "Publish test results"
-            inputs:
-              testResultsFormat: "JUnit"
-              mergeTestResults: true # Optional
           - task: PublishCodeCoverageResults@1
             displayName: "Publish publish code coverage"
             inputs:
