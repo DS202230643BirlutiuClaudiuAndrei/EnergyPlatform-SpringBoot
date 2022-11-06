@@ -61,7 +61,7 @@ public class EnergyUser implements Serializable, UserDetails {
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Collection<MeteringDevice> meteringDevices;
 
-    @OneToMany(mappedBy = "forEnergyUser", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "forEnergyUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Measurement> measurements;
 
     @Column(name = "user_password", nullable = false)
