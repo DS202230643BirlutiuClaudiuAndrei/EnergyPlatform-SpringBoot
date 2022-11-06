@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
             savedUser = userRepository.saveAndFlush(energyUser);
         } catch (DataIntegrityViolationException e) {
             log.error("Could not save the new client " + e.getMessage());
-            throw new ConstraintViolationException("Could not save the new user account");
+            throw new ConstraintViolationException("Could not save the new user account. The email provided is used by another account");
         }
         return savedUser.getEmail();
     }
