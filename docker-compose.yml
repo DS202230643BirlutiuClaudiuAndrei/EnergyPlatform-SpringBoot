@@ -3,7 +3,7 @@ version: '3'
 services:
 
   demo-db:
-    image: energyplatformclaudiubirlutiu30643.azurecr.io/db
+    image: energyplatformclaudiubirlutiu30643.azurecr.io/db:latest
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
       timeout: 45s
@@ -20,7 +20,7 @@ services:
     container_name: demo-db
 
   demo-be:
-    image: energyplatformclaudiubirlutiu30643.azurecr.io/claudiubirlutiu30643backend
+    image: energyplatformclaudiubirlutiu30643.azurecr.io/claudiubirlutiu30643backend:latest
     ports:
       - "8080:8080"
     environment:
