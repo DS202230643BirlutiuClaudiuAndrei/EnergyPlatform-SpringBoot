@@ -1,6 +1,6 @@
 package dsrl.energy.config.security;
 
-import dsrl.energy.service.UserService;
+import dsrl.energy.service.general.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;

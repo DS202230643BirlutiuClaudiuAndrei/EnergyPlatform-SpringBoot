@@ -6,7 +6,7 @@ import dsrl.energy.dto.authentication.InfoRegisterDTO;
 import dsrl.energy.dto.authentication.ResponseDTO;
 import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.enums.EnergyUserRole;
-import dsrl.energy.service.UserService;
+import dsrl.energy.service.general.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

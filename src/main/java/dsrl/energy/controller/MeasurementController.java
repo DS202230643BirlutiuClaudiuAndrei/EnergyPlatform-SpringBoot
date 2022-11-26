@@ -1,7 +1,7 @@
 package dsrl.energy.controller;
 
 import dsrl.energy.dto.measurement.ChartDataSetDTO;
-import dsrl.energy.service.MeasurementService;
+import dsrl.energy.service.general.MeasurementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

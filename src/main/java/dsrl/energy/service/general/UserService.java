@@ -1,4 +1,4 @@
-package dsrl.energy.service;
+package dsrl.energy.service.general;
 
 import dsrl.energy.dto.authentication.InfoRegisterDTO;
 import dsrl.energy.dto.authentication.UserAuthMapper;

@@ -5,7 +5,16 @@ services:
   demo-db:
     image: energyplatformclaudiubirlutiu30643.azurecr.io/db:latest
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-d",
+          "postgres",
+          "-U",
+          "postgres"
+        ]
       timeout: 45s
       interval: 10s
       retries: 5
@@ -24,11 +33,24 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - SPRING_PROFILES_ACTIVE=prod
       - DATABASE_IP=demo-db
       - DATABASE_PORT=5432
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_DBNAME=energy_monitoring_db
+      - SPRING_RABBITMQ_HOST=rabbitmq
     depends_on:
       - demo-db
+      - rabbitmq
 
+  rabbitmq:
+    image: 'rabbitmq:3.11.3-management-alpine'
+    ports:
+      - "5672:5672"
+      - "5673:5673"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "claudiu"
+      RABBITMQ_DEFAULT_PASS: "claudiu"
+      RABBITMQ_DEFAULT_QUEUE: "energy"

@@ -1,6 +1,6 @@
 package dsrl.energy.config.security;
 
-import dsrl.energy.service.UserService;
+import dsrl.energy.service.general.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,6 +56,10 @@ public class Security {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/ws-message/**").permitAll()
+                .antMatchers("/ws/**").permitAll()
+                .antMatchers("/send/**").permitAll()
+                .antMatchers("/topic/**").permitAll()
                 .anyRequest().authenticated();
 
         //add filter based on jwt token

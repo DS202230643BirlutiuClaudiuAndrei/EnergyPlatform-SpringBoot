@@ -1,6 +1,8 @@
 package dsrl.energy.repository;
 
+import dsrl.energy.model.entity.EnergyUser;
 import dsrl.energy.model.entity.Measurement;
+import dsrl.energy.model.entity.MeteringDevice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -22,4 +25,6 @@ public interface MeasurementRepository extends JpaRepository<Measurement, UUID> 
                                                               @Param("startDate") LocalDateTime startDate,
                                                               @Param("endDate") LocalDateTime endDate);
 
+
+    Optional<Measurement> findTopByMeteringDeviceAndForEnergyUserOrderByTimeStampDesc(MeteringDevice meteringDevice, EnergyUser owner);
 }

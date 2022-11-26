@@ -6,7 +6,7 @@ import dsrl.energy.dto.httpresponse.PutResponseDTO;
 import dsrl.energy.dto.metteringdevice.MeteringDeviceDTO;
 import dsrl.energy.dto.metteringdevice.PostMeteringDeviceDTO;
 import dsrl.energy.dto.metteringdevice.PutMeteringDeviceDTO;
-import dsrl.energy.service.MeteringDeviceService;
+import dsrl.energy.service.general.MeteringDeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
