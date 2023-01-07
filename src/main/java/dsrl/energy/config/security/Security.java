@@ -60,6 +60,9 @@ public class Security {
                 .antMatchers("/ws/**").permitAll()
                 .antMatchers("/send/**").permitAll()
                 .antMatchers("/topic/**").permitAll()
+                .antMatchers("/calculator/**").permitAll()
+                .antMatchers("/hello/**").permitAll()
+
                 .anyRequest().authenticated();
 
         //add filter based on jwt token
